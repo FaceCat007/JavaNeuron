@@ -1,17 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package neuron;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 
+/*
+* AES加密
+*/
 public class AESHelper {
-     public static String m_key = "1234567890123456";
+    public static String m_key = "1234567890123456"; //密钥
 
+    /*
+     * 解密
+     */
     public static String decrypt(String key, String toDecrypt) {
         try {
             if (key == null || key.length() == 0) {
@@ -36,6 +37,9 @@ public class AESHelper {
         }
     }
 
+    /*
+    * 加密
+    */
     public static String encrypt(String key, String toEncrypt) {
         try {
             if (key == null || key.length() == 0) {

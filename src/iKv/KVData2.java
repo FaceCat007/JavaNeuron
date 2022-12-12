@@ -4,26 +4,38 @@ import java.io.File;
 import java.io.RandomAccessFile;
 import facecat.topin.core.*;
 
+/*
+* 内存数据库切片
+*/
 public class KVData2 {
+    /*
+    * 构造函数
+    */
     public KVData2(){
 
     }
 
+    /*
+    * 析构函数
+    */
     public void finalize() throws Throwable {
     }
 
-    public Object m_lock = new Object();
-    public Object m_lock2 = new Object();
-    public int m_count;
-    public long m_lastTime;
-    public boolean m_loaded;
-    public FCKVArray m_kv;
-    public ArrayList<FCValue0> m_list = new ArrayList<FCValue0>();
-    public int m_pos;
-    public int m_totalSize;
-    public ArrayList<KVWriteInfo0> m_writeInfos = new ArrayList<KVWriteInfo0>();
-    public String m_dbPath;
+    public Object m_lock = new Object(); //数据锁1
+    public Object m_lock2 = new Object(); //数据锁2
+    public int m_count; //数据量
+    public long m_lastTime; //上次操作时间
+    public boolean m_loaded; //是否已加载
+    public FCKVArray m_kv; //所在数据库
+    public ArrayList<FCValue0> m_list = new ArrayList<FCValue0>(); //包含数据
+    public int m_pos; //写入位置
+    public int m_totalSize; //总大小
+    public ArrayList<KVWriteInfo0> m_writeInfos = new ArrayList<KVWriteInfo0>(); //写入缓存
+    public String m_dbPath; //保存位置
 
+    /*
+    * 检查线程
+    */
     public Runnable runnable = new Runnable() {
         @Override
         public void run() {
@@ -42,6 +54,9 @@ public class KVData2 {
         }
     };
 
+    /*
+    * 检查循环
+    */
     public int checkLoop(){
         int state = fallFile();
         if(m_kv.m_autoClose || m_kv.m_forceClose){
@@ -55,6 +70,9 @@ public class KVData2 {
         return state;
     }
 
+    /*
+    * 关闭缓存
+    */
     public void closeCache(){
         synchronized (m_lock) {
             fallFile();
@@ -75,6 +93,9 @@ public class KVData2 {
         m_lastTime = getTickCount();
     }
 
+    /*
+    * 数据落地
+    */
     public int fallFile(){
         int state = -1;
         if(m_kv.isFall()){
@@ -117,6 +138,9 @@ public class KVData2 {
         return state;
     }
 
+    /*
+    * 获取索引获取数据流
+    */
     public byte[] getValue(int index){
         byte[] value = null;
         synchronized (m_lock) {
@@ -136,6 +160,9 @@ public class KVData2 {
         return value;
     }
     
+    /*
+    * 根据索引获取数据文本
+    */
     public int getKv(int index, RefObject<String> value){
         int state = 0;
         synchronized(m_lock) {
@@ -156,6 +183,9 @@ public class KVData2 {
         return state;
     }
     
+    /*
+    * 获取数据量
+    */
     public int getKvCount(){
         int count = 0;
         synchronized (m_lock) {
@@ -171,6 +201,9 @@ public class KVData2 {
         return count;
     }
 
+    /*
+    * 加载数据
+    */
     public void load(int number) {
         try {
             if (m_kv.isFall()) {
@@ -224,8 +257,11 @@ public class KVData2 {
         }
     }
 
-    private RandomAccessFile m_accessFile;
+    private RandomAccessFile m_accessFile; //文件流
 
+    /*
+    * 添加数据
+    */
     public void addValue(byte[] value){
         synchronized (m_lock) {
             try {
@@ -269,10 +305,16 @@ public class KVData2 {
         m_lastTime = getTickCount();
     }
 
+    /*
+    * 获取当前毫秒数
+    */
     public long getTickCount(){
         return System.currentTimeMillis();
     }
 
+    /*
+    * 流转字符串
+    */
     public static String bytesToStr(byte[] bytes){
         int bytesSize = bytes.length;
         int pos = 0;

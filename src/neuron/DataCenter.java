@@ -3,107 +3,132 @@ import java.util.*;
 import facecat.topin.service.*;
 import facecat.topin.core.*;
 
+/*
+* 服务中心
+*/
 public class DataCenter { 
     private static String m_userID = "";
 
-    /// <summary>
-    /// 获取或设置用户ID
-    /// </summary>
+    /*
+    * 获取用户ID
+    */
     public static String getUserID() {
             return m_userID;
     }
 
+    /*
+    * 设置用户ID
+    */
     public static void setUserID(String value){
             m_userID = value;
     }
 
     private static String m_room = "000";
 
-    /// <summary>
-    /// 房间号
-    /// </summary>
+    /*
+    * 获取房间号
+    */
     public static String getRoom() {
             return m_room;
     }
 
+    /*
+    * 设置房间号
+    */
     public static void setRoom(String value){
             m_room = value;
     }
 
     private static String m_icon = "";
-
-    /// <summary>
-    /// 获取或设置图标
-    /// </summary>
+    
+    /*
+    * 获取头像
+    */
     public static String getIcon() {
             return m_icon;
     }
 
+    /*
+    * 设置头像
+    */
     public static void setIcon(String value){
             m_icon = value;
     }
 
     private static String m_aesKey = "";
 
-    /// <summary>
-    /// 加密密钥
-    /// </summary>
+    /*
+    * 获取加密密钥
+    */
     public static String getAesKey() {
             return m_aesKey;
     }
 
+    /*
+    * 设置加密密钥
+    */
     public static void setAesKey(String value){
             m_aesKey = value;
     }
 
     private static String m_code = "";
 
-    /// <summary>
-    /// 获取或设置备注
-    /// </summary>
+    /*
+    * 获取备注
+    */
     public static String getCode() {
             return m_code;
     }
 
+    /*
+    * 设置备注
+    */
     public static void setCode(String value){
             m_code = value;
     }
 
-    /// <summary>
-    /// 最大服务器连接数
-    /// </summary>
+    /*
+    * 最大服务器连接数
+    */
     public static final int MAXSERVERS = 1;
-
-    /// <summary>
-    /// 区块链通用请求ID
-    /// </summary>
+    
+    /*
+    * 通用请求ID
+    */
     public static int getChatRequestID() {
             return 9999;
     }
     
     private static HostInfo m_hostInfo = new HostInfo();
 
+    /*
+    * 获取主机信息
+    */
     public static HostInfo getHostInfo(){
             return m_hostInfo;
     }
     
+    /*
+    * 服务是否或者
+    */
     public static boolean isAppAlive(){
         return true;
     }
     
+    /*
+    * 文件分隔符号
+    */
     //public static String m_seperator = "/"; //Linux
     public static String m_seperator = "\\"; //Windows
     
-    /// <summary>
-    /// 数据的数量
-    /// </summary>
+    /*
+    * 数据的数量
+    */
     public static HashMap<String, Integer> m_datasCount = new HashMap<String, Integer>();
 
-    /// <summary>
-    /// 保存数据数量
-    /// </summary>
-    /// <param name="key"></param>
-    /// <returns></returns>
+    /*
+    * 保存数据
+    */
     public static boolean saveDataCount(String key) {
             boolean exist = false;
             synchronized (m_datasCount) {
@@ -117,16 +142,23 @@ public class DataCenter {
             return exist;
     }
      
-     private static ChatServiceSV m_serverChatService;
+    
+    private static ChatServiceSV m_serverChatService;
      
-     public static ChatServiceSV getServerChatService(){
+    /*
+    * 获取服务端
+    */
+    public static ChatServiceSV getServerChatService(){
          return m_serverChatService;
      }
      
-     public static void startService(){
-         m_hostInfo.m_localHost = "127.0.0.1";
-         m_hostInfo.m_localPort = 16665;
-         m_serverChatService = new ChatServiceSV();
+    /*
+    * 启动服务
+    */
+    public static void startService(){
+        m_hostInfo.m_localHost = "127.0.0.1";
+        m_hostInfo.m_localPort = 16665;
+        m_serverChatService = new ChatServiceSV();
         FCServerService.addService(m_serverChatService);
 	m_serverChatService.setPort(m_hostInfo.m_localPort);
 	int socketID = FCServerService.startServer(m_serverChatService.getPort(), new byte[]{99,104,97,116});
@@ -134,8 +166,11 @@ public class DataCenter {
         m_serverChatService.startService();
      }
      
-     public static String getAppPath(){
-         //return System.getProperty("user.dir").replace("\\", "/"); //Linux
-         return System.getProperty("user.dir"); //Windows
-     }
+    /*
+    * 获取程序路径
+    */
+    public static String getAppPath(){
+        //return System.getProperty("user.dir").replace("\\", "/"); //Linux
+        return System.getProperty("user.dir"); //Windows
+    }
 }

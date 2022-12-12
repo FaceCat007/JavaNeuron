@@ -11,59 +11,76 @@ import iKv.KVDataBase2;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/*
+* 多端互动客户端
+*/
 public class ChatServiceEx extends FCClientService
 {
+    /*
+    * 构造函数
+    */
     public ChatServiceEx()
     {
         setServiceID(SERVICEID_CHAT);
         setCompressType(COMPRESSTYPE_NONE);
     }
         
-        /// <summary>
-    /// 区块链服务ID
-    /// </summary>
+    /*
+    * 区块链服务ID
+    */
     public static final int SERVICEID_CHAT = 19999;
 
-    /// <summary>
-    /// 主机信息
-    /// </summary>
+    /*
+    * 主机信息
+    */
     public static final int FUNCTIONID_GETHOSTS = 1;
 
-    /// <summary>
-    /// 广播区块链功能ID
-    /// </summary>
+    /*
+    * 广播功能ID
+    */
     public static final int FUNCTIONID_SENDALL = 3;
 
-    /// <summary>
-    /// 进入
-    /// </summary>
+    /*
+    * 进入ID
+    */
     public static final int FUNCTIONID_ENTER = 6;
 
-    /// <summary>
-    /// 聊天记录
-    /// </summary>
+    /*
+    * 获取聊天记录的ID
+    */
     public static final int FUNCTIONID_RECORD = 7;
 
+    /*
+    * 获取状态的ID
+    */
     public static final int FUNCTIONID_STATE = 8;
 
+    /*
+    * 套接字ID
+    */
     public int m_socketID;
 
+    /*
+    * 唯一标识
+    */
     public String m_token = "";
 
+    /*
+    * 加密密钥
+    */
     public String m_aesKey;
 
-    /// <summary>
-    /// 区块链通用请求ID
-    /// </summary>
+    /*
+    * 通用请求ID
+    */
     public int getChatRequestID()
     {
         return 9999;
     }
 
-    /// <summary>
-    /// 进入区块链
-    /// </summary>
-    /// <returns>状态</returns>
+    /*
+    * 进入服务
+    */
     public int enter(String userID, String code, String icon, String room)
     {
         try{
@@ -85,13 +102,9 @@ public class ChatServiceEx extends FCClientService
         }
     }
 
-    /// <summary>
-    /// 获取弹幕信息
-    /// </summary>
-    /// <param name="chatData">聊天信息</param>
-    /// <param name="body">包体</param>
-    /// <param name="bodyLength">包体长度</param>
-    /// <returns></returns>
+    /*
+    * 获取通讯信息
+    */
     public int getChatData(ChatData chatData, byte[] body, int bodyLength)
     {
         try {
@@ -128,16 +141,13 @@ public class ChatServiceEx extends FCClientService
         }
     }
 
-    /// <summary>
-    /// 发送消息
-    /// </summary>
-    /// <param name="userID">方法ID</param>
-    /// <param name="tokens">请求ID</param>
-    /// <param name="chatData">发送字符</param>
+    /*
+    * 发送消息
+    */
     public int send(int functionID, ChatData chatData)
     {
         try {
-            saveDataCount(chatData.m_key);
+            DataCenter.saveDataCount(chatData.m_key);
             FCBinary bw = new FCBinary();
             bw.writeDouble(chatData.m_time);
             bw.writeString(chatData.m_key);
@@ -165,12 +175,9 @@ public class ChatServiceEx extends FCClientService
         }
     }
         
-    /// <summary>
-    /// 获取主机信息
-    /// </summary>
-    /// <param name="body">包体</param>
-    /// <param name="bodyLength">包体长度</param>
-    /// <returns></returns>
+    /*
+    * 获取主机信息
+    */
     public static int getHostInfos(ArrayList<ChatHostInfo> datas, RefObject<Integer> type, byte[] body, int bodyLength) {
         try {
             FCBinary br = new FCBinary();
@@ -197,6 +204,9 @@ public class ChatServiceEx extends FCClientService
         }
     }
 
+    /*
+    * 接收消息
+    */
     public void onReceive(FCMessage message)
     {
         //base.onReceive(message);
@@ -227,7 +237,7 @@ public class ChatServiceEx extends FCClientService
             ChatData chatData = new ChatData();
             if (getChatData(chatData, message.m_body, message.m_bodyLength) == 1)
             {
-                if (!saveDataCount(chatData.m_key))
+                if (!DataCenter.saveDataCount(chatData.m_key))
                 {
                     if (chatData.m_key.indexOf("addtext:") != -1)
                     {
@@ -236,35 +246,10 @@ public class ChatServiceEx extends FCClientService
             }
         }
     }
-
-    /// <summary>
-    /// 数据的数量
-    /// </summary>
-    public HashMap<String, Integer> m_datasCount = new HashMap<String, Integer>();
-
-    /// <summary>
-    /// 保存数据数量
-    /// </summary>
-    /// <param name="key"></param>
-    /// <returns></returns>
-    public boolean saveDataCount(String key)
-    {
-        boolean exist = false;
-        synchronized (m_datasCount)
-        {
-            if (m_datasCount.containsKey(key))
-            {
-                m_datasCount.put(key, m_datasCount.get(key) + 1);
-                exist = true;
-            }
-            else
-            {
-                m_datasCount.put(key, 1);
-            }
-        }
-        return exist;
-    }
     
+    /*
+    * 启动连接
+    */
     public void startConnect(String ip, int port, String userID, String code, String icon, String room, String aesKey){
         m_socketID = FCClientService.connectToServer(0, ip, port, "", 0, "", "", "", 0, new byte[]{99,104,97,116});
         m_aesKey = aesKey;

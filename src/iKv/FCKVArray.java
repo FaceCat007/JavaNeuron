@@ -1,62 +1,130 @@
 package iKv;
 import facecat.topin.core.*;
 
+/*
+* 本地顺序写入数据库
+*/
 public class FCKVArray {
-    public boolean m_autoClose;
-    public int m_closeTime = 10000;
-    public KVData2 []m_datas;
-    public boolean m_fall = true;
-    public boolean m_forceClose;
-    public String m_name;
-    public int m_number = 1;
-    public String m_path;
-    public int m_hashMode;
+    public boolean m_autoClose; //自动关闭
+    public int m_closeTime = 10000; //闲置超时
+    public KVData2 []m_datas; //分片存储的数据
+    public boolean m_fall = true; //是否落地
+    public boolean m_forceClose; //是否强制关闭
+    public String m_name; //名称
+    public int m_number = 1; //切割文件数
+    public String m_path; //路径
+    public int m_hashMode; //哈希模式
+    
+    /*
+    * 构造函数
+    */
     public FCKVArray(){
 
     }
+    
+    /*
+    * 析构函数
+    */
     public void finalize() throws Throwable {
     }
+    
+    /*
+    * 是否自动关闭资源
+    */
     public boolean autoClose(){
         return m_autoClose;
     }
+    
+    /*
+    * 设置是否自动关闭资源
+    */
     public void setAutoClose(boolean autoClose){
         m_autoClose = autoClose;
     }
+    
+    /*
+    * 获取闲置关闭倒计时
+    */
     public int getCloseTime(){
         return m_closeTime;
     }
+    
+    /*
+    * 设置闲置关闭倒计时
+    */
     public void setCloseTime(int closeTime){
         m_closeTime = closeTime;
     }
+    
+    /*
+    * 是否落地
+    */
     public boolean isFall(){
         return m_fall;
     }
+    
+    /*
+    * 设置是否落地
+    */
     public void setFall(boolean fall){
         m_fall = fall;
     }
+    
+    /*
+    * 获取名称
+    */
     public String getName(){
         return m_name;
     }
+    
+    /*
+    * 设置名称
+    */
     public void setName(String name){
         m_name = name;
     }
+    
+    /*
+    * 获取切割文件数
+    */
     public int getNumber(){
         return m_number;
     }
+    
+    /*
+    * 设置切割文件数
+    */
     public void setNumber(int number){
         m_number = number;
     }
+    
+    /*
+    * 获取路径
+    */
     public String getPath(){
         return m_path;
     }
+    
+    /*
+    * 设置路径
+    */
     public void setPath(String path){
         m_path = path;
     }
 
+    /*
+    * 是否使用多线程
+    */
     public boolean m_threadMode = true;
 
+    /*
+    * 是否占用文件
+    */
     public boolean m_noTakeup = false;
 
+    /*
+    * 关闭
+    */
     public int close(){
         try {
             m_forceClose = true;
@@ -85,6 +153,9 @@ public class FCKVArray {
         return 0;
     }
 
+    /*
+    * 根据索引获取数据
+    */
     public String getValue(int index){
         try {
             byte[] bytes = m_datas[0].getValue(index);
@@ -98,18 +169,30 @@ public class FCKVArray {
         }
     }
 
+    /*
+    * 根据索引获取数据流
+    */
     public byte[] getValue2(int index){
         return m_datas[0].getValue(index);
     }
 
+    /*
+    * 根据索引和切片号获取数据
+    */
     public int getKv(int index, int number, RefObject<String> value){
         return m_datas[number].getKv(index, value);
     }
 
+    /*
+    * 根据切片号获取数据量
+    */
     public int getKvCount(int number){
         return m_datas[number].getKvCount();
     }
 
+    /*
+    * 加载数据
+    */
     public void load(){
         try {
             String dir = m_path;
@@ -145,6 +228,9 @@ public class FCKVArray {
         }
     }
 
+    /*
+    * 添加数据
+    */
     public void addValue( String value){
         try {
             m_datas[0].addValue(value.getBytes("GB2312"));
@@ -153,6 +239,9 @@ public class FCKVArray {
         }
     }
 
+    /*
+    * 添加流数据
+    */
     public void addValue2(byte[] value){
         m_datas[0].addValue(value);
     }

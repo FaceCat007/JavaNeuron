@@ -14,7 +14,13 @@ import java.io.RandomAccessFile;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/*
+* 多端互动服务端
+*/
 public class ChatServiceSV extends FCServerService {
+    /*
+    * 构造函数
+    */
     public ChatServiceSV(){
         m_token = FCTran.getGuid();
         setServiceID(SERVICEID_CHAT);
@@ -34,62 +40,107 @@ public class ChatServiceSV extends FCServerService {
         }
     }
     
-    /// <summary>
-    /// 区块链服务ID
-    /// </summary>
+    /*
+    * 区块链服务ID
+    */
     public static final int SERVICEID_CHAT = 19999;
 
-    /// <summary>
-    /// 主机信息
-    /// </summary>
+    /*
+    * 主机信息
+    */
     public static final int FUNCTIONID_GETHOSTS = 1;
 
-    /// <summary>
-    /// 广播区块链功能ID
-    /// </summary>
+    /*
+    * 广播功能ID
+    */
     public static final int FUNCTIONID_SENDALL = 3;
 
-    /// <summary>
-    /// 进入
-    /// </summary>
+    /*
+    * 进入
+    */
     public static final int FUNCTIONID_ENTER = 6;
     
-    /// <summary>
-    /// 聊天记录
-    /// </summary>
+    /*
+    * 聊天记录
+    */
     public static final int FUNCTIONID_RECORD = 7;
     
+    /*
+    * 获取状态
+    */
     public static final int FUNCTIONID_STATE = 8;
     
+    /*
+    * 操作云文件
+    */
     public static final int FUNCTIONID_CLOUDFILE = 9;
     
+    /*
+    * 发送非加密消息
+    */
     public static final int FUNCTIONID_SENDNOENCRPTY = 10;
     
+    /*
+    * 是否发送给临近节点
+    */
     public boolean m_sendToNear;
     
+    /*
+    * 端口号
+    */
     public int m_port = 16665;
+    
+    /*
+    * 唯一标识
+    */
     public String m_token;
+    
+    /*
+    * 节点集合
+    */
     public ArrayList<ChatHostInfo> m_serverHosts = new ArrayList<ChatHostInfo>();
+    
+    /*
+    * 连接信息
+    */
     public HashMap<Integer, ChatHostInfo> m_socketIDs = new HashMap<Integer, ChatHostInfo>();
     
+    /*
+    * 要发送的消息
+    */
     public ArrayList<FCMessage> m_sendMessages = new ArrayList<FCMessage>();
     
+    /*
+    * 获取端口号
+    */
     public int getPort(){
         return m_port;
     }
 
+    /*
+    * 设置端口号
+    */
     public void setPort(int port){
         m_port = port;
     }
 
+    /*
+    * 获取唯一标识
+    */
     public String getToken(){
 	return m_token;
     }
 
+    /*
+    * 设置唯一标识
+    */
     public void setToken(String token){
 	m_token = token;
     }
 
+    /*
+    * 添加服务端主机
+    */
     public void addServerHosts(ChatHostInfo hostInfo){
         synchronized(m_serverHosts){
 		int serverHostsSize = m_serverHosts.size();
@@ -107,6 +158,9 @@ public class ChatServiceSV extends FCServerService {
         }
     }
 
+    /*
+    * 检查心跳包
+    */
     public void checkAlive(){
         while(DataCenter.isAppAlive()){
             synchronized(m_socketIDs){
@@ -127,6 +181,9 @@ public class ChatServiceSV extends FCServerService {
         }
     }
     
+    /*
+    * 获取历史记录
+    */
     public int record(FCMessage message){
         try{
             FCBinary br = new FCBinary();
@@ -201,6 +258,9 @@ public class ChatServiceSV extends FCServerService {
         }
     }
 
+    /*
+    * 进入
+    */
     public int enter(FCMessage message){
         try{
             int rtnSocketID = message.m_socketID;
@@ -316,13 +376,9 @@ public class ChatServiceSV extends FCServerService {
         return 0;   
     }
 
-	/// <summary>
-    /// 获取弹幕信息
-    /// </summary>
-    /// <param name="chatData">聊天信息</param>
-    /// <param name="body">包体</param>
-    /// <param name="bodyLength">包体长度</param>
-    /// <returns></returns>
+    /*
+    * 获取弹幕信息
+    */
     public static int getChatData(ChatData chatData, byte[] body, int bodyLength) {
         try {
             FCBinary br = new FCBinary();
@@ -350,6 +406,9 @@ public class ChatServiceSV extends FCServerService {
         }
     }
 
+    /*
+    * 客户端断开
+    */
     public void onClientClose(int socketID, int localSID){
         super.onClientClose(socketID, localSID);
         ArrayList<ChatHostInfo> removeHostInfos = new  ArrayList<ChatHostInfo>();
@@ -379,6 +438,9 @@ public class ChatServiceSV extends FCServerService {
         removeHostInfos.clear();
     }
 
+    /*
+    * 客户端连接
+    */
     public void onClientConnect(int socketID, int localSID, String ip){
          super.onClientConnect(socketID, localSID, ip);
         synchronized(m_socketIDs){
@@ -393,6 +455,9 @@ public class ChatServiceSV extends FCServerService {
         }
     }
 
+    /*
+    * 接收消息
+    */
     public void onReceive(FCMessage message){
         super.onReceive(message);
         switch (message.m_functionID) {
@@ -416,8 +481,14 @@ public class ChatServiceSV extends FCServerService {
         }
     }
     
-     public HashMap<String, String> m_receiveFileInfos = new HashMap<String, String>();
+    /*
+    * 接收文件信息
+    */
+    public HashMap<String, String> m_receiveFileInfos = new HashMap<String, String>();
     
+    /*
+    * 接收非加密信息
+    */
     public void sendAllNoEncrpty(FCMessage message)
     {
         ChatData chatData = new ChatData();
@@ -501,6 +572,9 @@ public class ChatServiceSV extends FCServerService {
         }
     }
 
+    /*
+    * 发送数据
+    */
     public int send(FCMessage message, ChatData chatData){
         try{
             String tokens = chatData.m_tokens;
@@ -526,10 +600,19 @@ public class ChatServiceSV extends FCServerService {
         }
     }
     
+    /*
+    * 是否记录消息
+    */
     public boolean m_recordChatData = true;
     
+    /*
+    * 消息锁
+    */
     public Object m_chatLock = new Object();
 
+    /*
+    * 发送消息
+    */
     public int sendAll(FCMessage message, boolean isLocal){
         if(isLocal){
             return dealWithMsg(message, isLocal);
@@ -544,7 +627,10 @@ public class ChatServiceSV extends FCServerService {
         }
     }
     
-     public int dealWithMsg(FCMessage message, boolean isLocal){
+    /*
+    * 处理发送消息
+    */
+    public int dealWithMsg(FCMessage message, boolean isLocal){
         FCMessage copyMessage = new FCMessage();
         copyMessage.copy(message);
         int rtnSocketID = message.m_socketID;
@@ -635,6 +721,9 @@ public class ChatServiceSV extends FCServerService {
         return 1;
     }
 
+    /*
+    * 发送主机信息
+    */
     public int sendHostInfos(ArrayList<Integer> socketIDs, int type, ArrayList<ChatHostInfo> hostInfos){
         try{
             int hostInfosSize = (int)hostInfos.size();
@@ -665,11 +754,17 @@ public class ChatServiceSV extends FCServerService {
         return 1;
     }
 
+    /*
+    * 发送消息给本地客户端
+    */
     public int sendMsg(FCMessage message){
         sendToListener(message);
         return 1;
     }
     
+    /*
+    * 发送消息线程
+    */
     public void startSendMessage()
     {
         while(true){
@@ -698,8 +793,14 @@ public class ChatServiceSV extends FCServerService {
         }
     }
     
+    /*
+    * 发送文件
+    */
     public ArrayList<SendFileInfo> m_sendFileInfos = new ArrayList<SendFileInfo>();
     
+    /*
+    * 处理发送文件
+    */
     public void startSendFile(String sendFileName, ChatData chatData, int socketID){
         try {
             String identifier = FCTran.getGuid();
@@ -735,6 +836,9 @@ public class ChatServiceSV extends FCServerService {
         }
     }
      
+    /*
+    * 发送文件线程
+    */
     public void checkSendFile(){
         while(true){
             ArrayList<SendFileInfo> sendFiles = new ArrayList<SendFileInfo>();
@@ -758,6 +862,9 @@ public class ChatServiceSV extends FCServerService {
         }
     }
     
+    /*
+    * 启动服务
+    */
     public void startService(){
          new Thread(new Runnable() {
                     @Override
@@ -779,6 +886,9 @@ public class ChatServiceSV extends FCServerService {
         }).start();
     }
     
+    /*
+    * 获取云文件信息
+    */
      public static int getCloudFiles(byte[] body, int bodyLength, ArrayList<CloudFile> cloudFiles)
     {
         try
@@ -807,6 +917,9 @@ public class ChatServiceSV extends FCServerService {
         return 1;
     }
 
+    /*
+    * 发送云文件信息
+    */
     public int sendCloudFiles(int socketID, ArrayList<CloudFile> cloudFiles)
     {
         try{
@@ -834,6 +947,9 @@ public class ChatServiceSV extends FCServerService {
         return 1;
     }
     
+    /*
+    * 获取所有的文件和文件夹
+    */
     public static void getDirAndFiles(ArrayList<String> list, String dir, boolean withFile, boolean recursion)
     {
             ArrayList<String> dirs = new ArrayList<String>();
@@ -855,7 +971,10 @@ public class ChatServiceSV extends FCServerService {
             }
     }
    
-     public static void deleteDir(String dir){
+    /*
+    * 删除文件夹
+    */
+    public static void deleteDir(String dir){
             ArrayList<String> files = new ArrayList<String>();
             FCFile.getFiles(dir, files);
             for (int i = 0; i < files.size(); i++)
@@ -871,6 +990,9 @@ public class ChatServiceSV extends FCServerService {
             new File(dir).delete();
     }
      
+    /*
+    * 拷贝文件
+    */
     public static void FileCopy(String srcPath, String destPath){ //文件复制
                File f = new File(srcPath); //源文件
                File F = new File(destPath);  //目的文件
@@ -890,7 +1012,10 @@ public class ChatServiceSV extends FCServerService {
 
     }
      
-     public static void foldercopy(String srcPath,String destPath){  //参数是目录&#xff0c;而不是文件
+   /*
+    * 拷贝文件夹
+    */
+    public static void foldercopy(String srcPath,String destPath){  //参数是目录&#xff0c;而不是文件
             File srcFolder = new File(srcPath);
             File destFolder = new File(destPath);
             if(!srcFolder.isDirectory()) //源文件不是一个文件夹
@@ -922,6 +1047,9 @@ public class ChatServiceSV extends FCServerService {
             }
     }
      
+   /*
+    * 检查操作权限
+    */
     public boolean checkOperater(int socketID, String userID)
     {
         boolean checkUser = false;
@@ -942,6 +1070,9 @@ public class ChatServiceSV extends FCServerService {
         return checkUser;
     }
     
+    /*
+    * 检查浏览权限
+    */
     public boolean checkBrowser(int socketID, String userID)
     {
         boolean checkUser = false;
@@ -963,6 +1094,9 @@ public class ChatServiceSV extends FCServerService {
         return checkUser;
     }
     
+    /*
+    * 处理云文件消息
+    */
     public int cloudFile(FCMessage message)
     {
         ArrayList<CloudFile> cloudFiles = new ArrayList<CloudFile>();

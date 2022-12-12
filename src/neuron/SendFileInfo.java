@@ -1,17 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package neuron;
 
-/**
- *
- * @author taode
- */
+/*
+* 发送文件信息
+*/
 public class SendFileInfo {
-    public String m_sendFileName = "";
-    public ChatData m_sendChatData;
-    public String m_id = "";
-    public int m_socketID;
+    public String m_sendFileName = ""; //文件名
+    public ChatData m_sendChatData; //附带信息
+    public String m_id = ""; //ID
+    public int m_socketID; //套接字ID
 }
