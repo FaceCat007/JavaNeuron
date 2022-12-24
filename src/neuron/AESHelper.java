@@ -12,7 +12,9 @@ public class AESHelper {
 
     /*
      * 解密
-     */
+    * 密码
+    * 要解密的字符
+    */
     public static String decrypt(String key, String toDecrypt) {
         try {
             if (key == null || key.length() == 0) {
@@ -39,6 +41,8 @@ public class AESHelper {
 
     /*
     * 加密
+    * 密码
+    * 要解密的字符
     */
     public static String encrypt(String key, String toEncrypt) {
         try {

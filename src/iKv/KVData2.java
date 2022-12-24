@@ -140,6 +140,7 @@ public class KVData2 {
 
     /*
     * 获取索引获取数据流
+    * index 索引
     */
     public byte[] getValue(int index){
         byte[] value = null;
@@ -162,6 +163,8 @@ public class KVData2 {
     
     /*
     * 根据索引获取数据文本
+    * index 索引
+    * value 返回数据
     */
     public int getKv(int index, RefObject<String> value){
         int state = 0;
@@ -203,6 +206,7 @@ public class KVData2 {
 
     /*
     * 加载数据
+    * number 切片号
     */
     public void load(int number) {
         try {
@@ -261,6 +265,7 @@ public class KVData2 {
 
     /*
     * 添加数据
+    * value 数据
     */
     public void addValue(byte[] value){
         synchronized (m_lock) {
@@ -314,6 +319,7 @@ public class KVData2 {
 
     /*
     * 流转字符串
+    * bytes 流数据
     */
     public static String bytesToStr(byte[] bytes){
         int bytesSize = bytes.length;

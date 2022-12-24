@@ -31,6 +31,8 @@ public class KVDataBase2 {
 
     /*
     * 初始化数据库
+    * path 路径
+    * name 名称
     */
     public static int initDB(String path, String name){
         int newID = -1;
@@ -55,6 +57,8 @@ public class KVDataBase2 {
 
     /*
     * 初始化数据库，不占文件不起多线程
+    * path 路径
+    * name 名称
     */
     public static int initDB2(String path, String name){
         int newID = -1;
@@ -81,6 +85,7 @@ public class KVDataBase2 {
 
     /*
     * 关闭数据库
+    * kID ID
     */
     public static int closeDB(int kID){
         int state = 0;
@@ -114,6 +119,9 @@ public class KVDataBase2 {
 
     /*
     * 根据索引获取值
+    * kID ID
+    * index 索引
+    * value 返回数据
     */
     public static int getValue(int kID, int index, RefObject<String> value){
         int state = 0;
@@ -132,6 +140,8 @@ public class KVDataBase2 {
 
     /*
     * 根据索引获取流
+    * kID ID
+    * index 索引
     */
     public static byte[] getValue(int kID, int index){
         byte[] value = null;
@@ -147,6 +157,7 @@ public class KVDataBase2 {
 
     /*
     * 获取数据量
+    * kID ID
     */
     public static int getValueCount(int kID){
         int count = 0;
@@ -161,6 +172,8 @@ public class KVDataBase2 {
 
     /*
     * 添加数据
+    * kID ID
+    * value 数据
     */
     public static int addValue(int kID, String value){
         int state = 0;
@@ -176,6 +189,8 @@ public class KVDataBase2 {
 
     /*
     * 添加流数据
+    * kID ID
+    * value 数据
     */
     public static int addValue(int kID, byte[] value){
         int state = 0;

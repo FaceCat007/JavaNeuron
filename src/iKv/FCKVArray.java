@@ -155,6 +155,7 @@ public class FCKVArray {
 
     /*
     * 根据索引获取数据
+    * index 索引
     */
     public String getValue(int index){
         try {
@@ -171,6 +172,7 @@ public class FCKVArray {
 
     /*
     * 根据索引获取数据流
+    * index 索引
     */
     public byte[] getValue2(int index){
         return m_datas[0].getValue(index);
@@ -178,6 +180,9 @@ public class FCKVArray {
 
     /*
     * 根据索引和切片号获取数据
+    * index 索引
+    * number 切片号
+    * value 返回数据
     */
     public int getKv(int index, int number, RefObject<String> value){
         return m_datas[number].getKv(index, value);
@@ -185,6 +190,7 @@ public class FCKVArray {
 
     /*
     * 根据切片号获取数据量
+    * number 切片号
     */
     public int getKvCount(int number){
         return m_datas[number].getKvCount();
@@ -230,6 +236,7 @@ public class FCKVArray {
 
     /*
     * 添加数据
+    * value 字符
     */
     public void addValue( String value){
         try {
@@ -241,6 +248,7 @@ public class FCKVArray {
 
     /*
     * 添加流数据
+    * value 数据
     */
     public void addValue2(byte[] value){
         m_datas[0].addValue(value);

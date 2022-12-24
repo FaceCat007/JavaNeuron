@@ -80,6 +80,10 @@ public class ChatServiceEx extends FCClientService
 
     /*
     * 进入服务
+    * userID 用户ID
+    * code 昵称
+    * icon 头像
+    * room 房间
     */
     public int enter(String userID, String code, String icon, String room)
     {
@@ -104,6 +108,9 @@ public class ChatServiceEx extends FCClientService
 
     /*
     * 获取通讯信息
+    * chatData 返回数据
+    * body 包
+    * bodyLength 包长度
     */
     public int getChatData(ChatData chatData, byte[] body, int bodyLength)
     {
@@ -143,6 +150,8 @@ public class ChatServiceEx extends FCClientService
 
     /*
     * 发送消息
+    * functionID 方法ID
+    * chatData 数据
     */
     public int send(int functionID, ChatData chatData)
     {
@@ -177,6 +186,10 @@ public class ChatServiceEx extends FCClientService
         
     /*
     * 获取主机信息
+    * datas 返回数据
+    * type 返回类型
+    * body 包
+    * bodyLength 包长度
     */
     public static int getHostInfos(ArrayList<ChatHostInfo> datas, RefObject<Integer> type, byte[] body, int bodyLength) {
         try {
@@ -206,6 +219,7 @@ public class ChatServiceEx extends FCClientService
 
     /*
     * 接收消息
+    * message 消息
     */
     public void onReceive(FCMessage message)
     {
@@ -249,6 +263,13 @@ public class ChatServiceEx extends FCClientService
     
     /*
     * 启动连接
+    * ip IP地址
+    * port 端口号
+    * userID 用户ID
+    * code 昵称
+    * icon 头像
+    * room 房间
+    * aesKey 加密ID
     */
     public void startConnect(String ip, int port, String userID, String code, String icon, String room, String aesKey){
         m_socketID = FCClientService.connectToServer(0, ip, port, "", 0, "", "", "", 0, new byte[]{99,104,97,116});

@@ -140,6 +140,7 @@ public class ChatServiceSV extends FCServerService {
 
     /*
     * 添加服务端主机
+    * hostInfo 主机信息
     */
     public void addServerHosts(ChatHostInfo hostInfo){
         synchronized(m_serverHosts){
@@ -183,6 +184,7 @@ public class ChatServiceSV extends FCServerService {
     
     /*
     * 获取历史记录
+    * message 消息
     */
     public int record(FCMessage message){
         try{
@@ -260,6 +262,7 @@ public class ChatServiceSV extends FCServerService {
 
     /*
     * 进入
+    * message 消息
     */
     public int enter(FCMessage message){
         try{
@@ -377,7 +380,10 @@ public class ChatServiceSV extends FCServerService {
     }
 
     /*
-    * 获取弹幕信息
+    * 获取信息
+    * chatData 数据
+    * body 包
+    * bodyLength 包长度
     */
     public static int getChatData(ChatData chatData, byte[] body, int bodyLength) {
         try {
@@ -408,6 +414,8 @@ public class ChatServiceSV extends FCServerService {
 
     /*
     * 客户端断开
+    * socketID 套接字ID
+    * localSID 服务端套接字ID
     */
     public void onClientClose(int socketID, int localSID){
         super.onClientClose(socketID, localSID);
@@ -440,6 +448,9 @@ public class ChatServiceSV extends FCServerService {
 
     /*
     * 客户端连接
+    * socketID 套接字ID
+    * localSID 服务端套接字ID
+    * ip ip地址
     */
     public void onClientConnect(int socketID, int localSID, String ip){
          super.onClientConnect(socketID, localSID, ip);
@@ -457,6 +468,7 @@ public class ChatServiceSV extends FCServerService {
 
     /*
     * 接收消息
+    * message 消息
     */
     public void onReceive(FCMessage message){
         super.onReceive(message);
@@ -488,6 +500,7 @@ public class ChatServiceSV extends FCServerService {
     
     /*
     * 接收非加密信息
+    * message 消息
     */
     public void sendAllNoEncrpty(FCMessage message)
     {
@@ -574,6 +587,8 @@ public class ChatServiceSV extends FCServerService {
 
     /*
     * 发送数据
+    * message 消息
+    * chatData 信息
     */
     public int send(FCMessage message, ChatData chatData){
         try{
@@ -612,6 +627,8 @@ public class ChatServiceSV extends FCServerService {
 
     /*
     * 发送消息
+    * message 消息
+    * isLocal 是否本地
     */
     public int sendAll(FCMessage message, boolean isLocal){
         if(isLocal){
@@ -629,6 +646,8 @@ public class ChatServiceSV extends FCServerService {
     
     /*
     * 处理发送消息
+    * message 消息
+    * isLocal 是否本地
     */
     public int dealWithMsg(FCMessage message, boolean isLocal){
         FCMessage copyMessage = new FCMessage();
@@ -723,6 +742,9 @@ public class ChatServiceSV extends FCServerService {
 
     /*
     * 发送主机信息
+    * socketIDs 套接字数组
+    * type 类型
+    * hostInfos 返回主机信息
     */
     public int sendHostInfos(ArrayList<Integer> socketIDs, int type, ArrayList<ChatHostInfo> hostInfos){
         try{
@@ -756,6 +778,7 @@ public class ChatServiceSV extends FCServerService {
 
     /*
     * 发送消息给本地客户端
+    * message 消息
     */
     public int sendMsg(FCMessage message){
         sendToListener(message);
@@ -800,6 +823,9 @@ public class ChatServiceSV extends FCServerService {
     
     /*
     * 处理发送文件
+    * sendFileName 发送文件
+    * chatData 信息
+    * socketID 套接字ID
     */
     public void startSendFile(String sendFileName, ChatData chatData, int socketID){
         try {
@@ -888,6 +914,9 @@ public class ChatServiceSV extends FCServerService {
     
     /*
     * 获取云文件信息
+    * body 包
+    * bodyLength 包体长度
+    * cloudFiles 云文件信息
     */
      public static int getCloudFiles(byte[] body, int bodyLength, ArrayList<CloudFile> cloudFiles)
     {
@@ -919,6 +948,8 @@ public class ChatServiceSV extends FCServerService {
 
     /*
     * 发送云文件信息
+    * socketID 套接字ID
+    * cloudFiles 云文件信息
     */
     public int sendCloudFiles(int socketID, ArrayList<CloudFile> cloudFiles)
     {
@@ -949,6 +980,10 @@ public class ChatServiceSV extends FCServerService {
     
     /*
     * 获取所有的文件和文件夹
+    * list 返回文件/文件夹
+    * dir 目录
+    * withFile 是否包含文件
+    * recursion 是否递归
     */
     public static void getDirAndFiles(ArrayList<String> list, String dir, boolean withFile, boolean recursion)
     {
@@ -973,6 +1008,7 @@ public class ChatServiceSV extends FCServerService {
    
     /*
     * 删除文件夹
+    * dir 目录
     */
     public static void deleteDir(String dir){
             ArrayList<String> files = new ArrayList<String>();
@@ -992,6 +1028,8 @@ public class ChatServiceSV extends FCServerService {
      
     /*
     * 拷贝文件
+    * srcPath 源文件
+    * destPath 目标文件
     */
     public static void FileCopy(String srcPath, String destPath){ //文件复制
                File f = new File(srcPath); //源文件
@@ -1014,6 +1052,8 @@ public class ChatServiceSV extends FCServerService {
      
    /*
     * 拷贝文件夹
+    * srcPath 源文件
+    * destPath 目标文件
     */
     public static void foldercopy(String srcPath,String destPath){  //参数是目录&#xff0c;而不是文件
             File srcFolder = new File(srcPath);
@@ -1049,6 +1089,8 @@ public class ChatServiceSV extends FCServerService {
      
    /*
     * 检查操作权限
+    * socketID 套接字ID
+    * userID 用户ID
     */
     public boolean checkOperater(int socketID, String userID)
     {
@@ -1072,6 +1114,8 @@ public class ChatServiceSV extends FCServerService {
     
     /*
     * 检查浏览权限
+    * socketID 套接字ID
+    * userID 用户ID
     */
     public boolean checkBrowser(int socketID, String userID)
     {
@@ -1096,6 +1140,7 @@ public class ChatServiceSV extends FCServerService {
     
     /*
     * 处理云文件消息
+    * message 消息
     */
     public int cloudFile(FCMessage message)
     {
